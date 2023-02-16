@@ -27,7 +27,7 @@ quit(int rc)
 }
 
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 
 {    
     // start SDL
