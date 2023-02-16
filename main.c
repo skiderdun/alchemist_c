@@ -8,8 +8,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "SDL2/SDL.h"
+
+#include "render.h"
 
 static SDL_Window *window;
 static SDL_Renderer *renderer;
@@ -26,23 +29,43 @@ quit(int rc)
     exit(rc);
 }
 
-
+// Window creation and event loop
 int main(int argc, char **argv)
-
-{    
-    // start SDL
+{
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        printf("SDL_Init Error: %s /n", SDL_GetError());
+        fprintf(stderr, "SDL_Init() failed: %s \n", SDL_GetError());
         return 1;
     }
-    
-    // create window
-    window = SDL_CreateWindow("RougeLike", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
+
+    window = SDL_CreateWindow("RougeLike", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
     if (window == NULL) {
-        printf("SDL_CreateWindow Error: %s /n", SDL_GetError());
-        SDL_Quit();
-        return 1;
+        fprintf(stderr, "SDL_CreateWindow() failed: %s \n", SDL_GetError());
+        quit(2);
     }
-    
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (renderer == NULL) {
+        fprintf(stderr, "SDL_CreateRenderer() failed: %s \n", SDL_GetError());
+        quit(3);
+    }
+  
+    while (1) // (SDL_WaitEvent(&event) && event.type != SDL_QUIT)
+    {
+        SDL_Event event;
+        if (SDL_PollEvent(&event) && event.type == SDL_QUIT)
+            break;
+        // event loop
+        // render a pixel to the screen
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
+    }
+    SDL_DestroyWindow(window);
+
+    SDL_Quit();
+
     return 1;
-}
+    }
+
+
