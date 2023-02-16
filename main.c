@@ -1,4 +1,3 @@
-
 // a small rouglike game with a procedurally generated map
 // and a simple AI
 // written in C using SDL2
@@ -21,12 +20,12 @@ static SDL_Renderer *renderer;
 
 // end test area
 
-/* Call this instead of exit(), so we can clean up SDL: atexit() is evil. */
-static void
-quit(int rc)
+// quit function
+void quit(int code)
 {
+    SDL_DestroyWindow(window);
     SDL_Quit();
-    exit(rc);
+    exit(code);
 }
 
 // Window creation and event loop
